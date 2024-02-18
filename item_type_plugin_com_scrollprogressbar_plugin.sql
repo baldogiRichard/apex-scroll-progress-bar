@@ -1,0 +1,462 @@
+prompt --application/set_environment
+set define off verify off feedback off
+whenever sqlerror exit sql.sqlcode rollback
+--------------------------------------------------------------------------------
+--
+-- Oracle APEX export file
+--
+-- You should run this script using a SQL client connected to the database as
+-- the owner (parsing schema) of the application or as a database user with the
+-- APEX_ADMINISTRATOR_ROLE role.
+--
+-- This export file has been automatically generated. Modifying this file is not
+-- supported by Oracle and can lead to unexpected application and/or instance
+-- behavior now or in the future.
+--
+-- NOTE: Calls to apex_application_install override the defaults below.
+--
+--------------------------------------------------------------------------------
+begin
+wwv_flow_imp.import_begin (
+ p_version_yyyy_mm_dd=>'2023.10.31'
+,p_release=>'23.2.1'
+,p_default_workspace_id=>31247972357692975900
+,p_default_application_id=>207452
+,p_default_id_offset=>0
+,p_default_owner=>'WKSP_RMZRT'
+);
+end;
+/
+ 
+prompt APPLICATION 207452 - newapp
+--
+-- Application Export:
+--   Application:     207452
+--   Name:            newapp
+--   Date and Time:   16:30 Sunday February 18, 2024
+--   Exported By:     BALDOGI.RICHARD
+--   Flashback:       0
+--   Export Type:     Component Export
+--   Manifest
+--     PLUGIN: 66910365880442902328
+--   Manifest End
+--   Version:         23.2.1
+--   Instance ID:     63113759365424
+--
+
+begin
+  -- replace components
+  wwv_flow_imp.g_mode := 'REPLACE';
+end;
+/
+prompt --application/shared_components/plugins/item_type/com_scrollprogressbar_plugin
+begin
+wwv_flow_imp_shared.create_plugin(
+ p_id=>wwv_flow_imp.id(66910365880442902328)
+,p_plugin_type=>'ITEM TYPE'
+,p_name=>'COM.SCROLLPROGRESSBAR.PLUGIN'
+,p_display_name=>'Scroll Progress Bar'
+,p_category=>'EXECUTE'
+,p_supported_component_types=>'APEX_APPLICATION_PAGE_ITEMS'
+,p_javascript_file_urls=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'#PLUGIN_FILES#js/scrollProgress.js',
+'#PLUGIN_FILES#js/script.js'))
+,p_css_file_urls=>'#PLUGIN_FILES#css/style.css'
+,p_plsql_code=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'-- =============================================================================',
+'--',
+'--  Created by Richard Baldogi',
+'--',
+'--  This plug-in creates a Scroll Progress Bar to a designated area of the DOM.',
+'--',
+'--  License: MIT',
+'--',
+'--  GitHub: https://github.com/baldogiRichard/apex-scroll-progress-bar',
+'--',
+'-- =============================================================================',
+'',
+'--render function',
+'procedure render',
+'  ( p_item   in            apex_plugin.t_item',
+'  , p_plugin in            apex_plugin.t_plugin',
+'  , p_param  in            apex_plugin.t_item_render_param',
+'  , p_result in out nocopy apex_plugin.t_item_render_result ',
+'  )',
+'as',
+'    l_ajax_id         varchar2(4000) := apex_plugin.get_ajax_identifier;',
+'',
+'    --attributes',
+'    l_progressbar_direction        p_item.attribute_01%type := p_item.attribute_01;',
+'    l_scroll_direction             p_item.attribute_02%type := p_item.attribute_02;',
+'    l_progressbar_color            p_item.attribute_03%type := p_item.attribute_03;',
+'    l_calc_scrolling_from          p_item.attribute_04%type := p_item.attribute_04;',
+'',
+'    --standard attributes',
+'    l_width                        p_item.element_width%type       := p_item.element_width;',
+'    l_height                       p_item.element_height%type      := p_item.element_height;',
+'',
+'    l_classes                      p_item.element_css_classes%type := p_item.element_css_classes;',
+'    ',
+'    l_name                         p_item.name%type                := apex_escape.html(p_item.name);',
+'    l_value                        p_param.value%type             := apex_escape.html(p_param.value);',
+'',
+'begin',
+'    ',
+'    --debug',
+'    if apex_application.g_debug ',
+'    then',
+'        apex_plugin_util.debug_item_render',
+'          ( p_plugin => p_plugin',
+'          , p_item   => p_item',
+'          , p_param  => p_param',
+'          );',
+'    end if;',
+'',
+'    --Create HTML element',
+'    sys.htp.p(''<progress value="0" min="0" max="100" class="apex-scroll-progress-bar'' || '' '' || l_classes || ''" id="'' || l_name || ''" value="'' || l_value || ''"></progress>'');',
+'',
+'    --Pass attribute values to JSON',
+'    apex_json.initialize_clob_output;',
+'',
+'        apex_json.open_object;',
+'        ',
+'            apex_json.write(''progressBarDirection''  , l_progressbar_direction   );',
+'            apex_json.write(''scrollDirection''       , l_scroll_direction        );',
+'            apex_json.write(''progressBarColor''      , l_progressbar_color       );',
+'            apex_json.write(''calcScrollingFrom''     , l_calc_scrolling_from     );',
+'        ',
+'        apex_json.close_object;',
+'',
+'        apex_javascript.add_onload_code(''function(){SCROLLPROGRESSBAR.main('' || apex_json.get_clob_output|| '');}'');',
+'',
+'    apex_json.free_output;',
+'    ',
+'end render;'))
+,p_default_escape_mode=>'HTML'
+,p_api_version=>2
+,p_render_function=>'render'
+,p_standard_attributes=>'WIDTH:HEIGHT:REGION'
+,p_substitute_attributes=>true
+,p_subscribe_plugin_settings=>true
+,p_version_identifier=>'1.0'
+,p_about_url=>'https://github.com/baldogiRichard/apex-scroll-progress-bar'
+,p_files_version=>21
+);
+wwv_flow_imp_shared.create_plugin_attribute(
+ p_id=>wwv_flow_imp.id(66915183317992491991)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>1
+,p_display_sequence=>10
+,p_prompt=>'Progress Bar Direction'
+,p_attribute_type=>'SELECT LIST'
+,p_is_required=>false
+,p_default_value=>'LR'
+,p_is_translatable=>false
+,p_lov_type=>'STATIC'
+,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'The coloring direction of the scroll bar.',
+'',
+'Left to Right ( -> )',
+'',
+'Right to Left ( <- )',
+'',
+'Top to Bottom ( |',
+'                V )',
+'',
+'',
+'Bottom to Top ( / \',
+'                 | ',
+'              )'))
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66915850746130495421)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66915183317992491991)
+,p_display_sequence=>10
+,p_display_value=>'Left to Right'
+,p_return_value=>'LR'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66915853314640496433)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66915183317992491991)
+,p_display_sequence=>20
+,p_display_value=>'Right to Left'
+,p_return_value=>'RL'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66915788524498009191)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66915183317992491991)
+,p_display_sequence=>30
+,p_display_value=>'Top to Bottom'
+,p_return_value=>'TB'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66915879750577499100)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66915183317992491991)
+,p_display_sequence=>40
+,p_display_value=>'Bottom to Top'
+,p_return_value=>'BT'
+);
+wwv_flow_imp_shared.create_plugin_attribute(
+ p_id=>wwv_flow_imp.id(66916421158774021792)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>2
+,p_display_sequence=>20
+,p_prompt=>'Scroll Direction'
+,p_attribute_type=>'SELECT LIST'
+,p_is_required=>false
+,p_default_value=>'TB'
+,p_is_translatable=>false
+,p_lov_type=>'STATIC'
+,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'How the scrolling progress is going to be calculated.',
+'',
+'If the option "Left to Right" is chosen then calculation will start from the LEFT side of the scrollingbar.',
+'If the option "Right to Left" is chosen then calculation will start from the RIGHT side of the scrollingbar.',
+'If the option "Top to Bottom" is chosen then calculation will start from the TOP of the scrollingbar.',
+'If the option "Bottom to Top" is chosen then calculation will start from the BOTTOM of the scrollingbar.'))
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66916235840930511388)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66916421158774021792)
+,p_display_sequence=>10
+,p_display_value=>'Left to Right'
+,p_return_value=>'LR'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66916236818006512023)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66916421158774021792)
+,p_display_sequence=>20
+,p_display_value=>'Right to Left'
+,p_return_value=>'RL'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66916240075886512637)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66916421158774021792)
+,p_display_sequence=>30
+,p_display_value=>'Top to Bottom'
+,p_return_value=>'TB'
+);
+wwv_flow_imp_shared.create_plugin_attr_value(
+ p_id=>wwv_flow_imp.id(66916240916218513284)
+,p_plugin_attribute_id=>wwv_flow_imp.id(66916421158774021792)
+,p_display_sequence=>40
+,p_display_value=>'Bottom to Top'
+,p_return_value=>'BT'
+);
+wwv_flow_imp_shared.create_plugin_attribute(
+ p_id=>wwv_flow_imp.id(66917592485996525137)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>3
+,p_display_sequence=>30
+,p_prompt=>'Progress Bar Color'
+,p_attribute_type=>'COLOR'
+,p_is_required=>false
+,p_is_translatable=>false
+);
+wwv_flow_imp_shared.create_plugin_attribute(
+ p_id=>wwv_flow_imp.id(67055226872265831990)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_attribute_scope=>'COMPONENT'
+,p_attribute_sequence=>4
+,p_display_sequence=>40
+,p_prompt=>'Calculate scrolling from'
+,p_attribute_type=>'TEXT'
+,p_is_required=>true
+,p_is_translatable=>false
+,p_help_text=>wwv_flow_string.join(wwv_flow_t_varchar2(
+'A jQuery selector.',
+'',
+'For example: ".your-class" or "#your-id"'))
+);
+wwv_flow_imp_shared.create_plugin_event(
+ p_id=>wwv_flow_imp.id(66918566341117535556)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_name=>'apex-scroll-progress-bar-on-completed'
+,p_display_name=>'APEX Scroll Progress Bar On Completed'
+);
+wwv_flow_imp_shared.create_plugin_event(
+ p_id=>wwv_flow_imp.id(66918565949498535556)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_name=>'apex-scroll-progress-bar-on-progress'
+,p_display_name=>'APEX Scroll Progress Bar On Progress'
+);
+wwv_flow_imp_shared.create_plugin_event(
+ p_id=>wwv_flow_imp.id(66918565554877535555)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_name=>'apex-scroll-progress-bar-on-start'
+,p_display_name=>'APEX Scroll Progress Bar On Start'
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '2F2A2A0D0A202A2046616C6C6261636B206E6F6F702066756E6374696F6E0D0A202A20406D6574686F64206E6F6F700D0A202A204072657475726E73207B756E646566696E65647D0D0A202A2F0D0A66756E6374696F6E206E6F6F702829207B7D0D0A0D';
+wwv_flow_imp.g_varchar2_table(2) := '0A2F2A2A0D0A202A205363726F6C6C50726F677265737320636C61737320636F6E7374727563746F720D0A202A2040636F6E7374727563746F72205363726F6C6C50726F67726573730D0A202A2040706172616D207B46756E6374696F6E7D2068616E64';
+wwv_flow_imp.g_varchar2_table(3) := '6C65557064617465206D6574686F6420746F2063616C6C206F6E207363726F6C6C207570646174650D0A202A204072657475726E73207B756E646566696E65647D0D0A202A2F0D0A766172205363726F6C6C50726F6772657373203D2066756E6374696F';
+wwv_flow_imp.g_varchar2_table(4) := '6E2868616E646C655570646174652C7053656C6563746F7229207B0D0A20202F2F676574204F626A6563740D0A2020746869732E7363726F6C6C4F626A656374203D20617065782E6A517565727928222E742D526567696F6E2D626F647922295B315D3B';
+wwv_flow_imp.g_varchar2_table(5) := '0D0A0D0A20202F2F2061737369676E2066756E6374696F6E20746F2063616C6C206F6E207570646174650D0A2020746869732E5F68616E646C65557064617465203D20747970656F662068616E646C65557064617465203D3D3D202766756E6374696F6E';
+wwv_flow_imp.g_varchar2_table(6) := '270D0A202020203F2068616E646C655570646174650D0A202020203A206E6F6F703B0D0A0D0A20202F2F2073657420696E697469616C2076616C7565730D0A2020746869732E5F76696577706F7274486569676874203D20746869732E5F676574566965';
+wwv_flow_imp.g_varchar2_table(7) := '77706F727448656967687428293B0D0A2020746869732E5F76696577706F72745769647468203D20746869732E5F67657456696577706F7274576964746828293B0D0A0D0A2020746869732E5F70726F6772657373203D20746869732E5F67657450726F';
+wwv_flow_imp.g_varchar2_table(8) := '677265737328293B0D0A0D0A20202F2F207472696767657220696E697469616C207570646174652066756E6374696F6E0D0A2020746869732E5F68616E646C6555706461746528746869732E5F70726F67726573732E782C20746869732E5F70726F6772';
+wwv_flow_imp.g_varchar2_table(9) := '6573732E79293B0D0A0D0A20202F2F2062696E64206576656E742066756E6374696F6E730D0A2020746869732E5F6F6E5363726F6C6C203D20746869732E5F6F6E5363726F6C6C2E62696E642874686973293B0D0A2020746869732E5F6F6E526573697A';
+wwv_flow_imp.g_varchar2_table(10) := '65203D20746869732E5F6F6E526573697A652E62696E642874686973293B0D0A0D0A20202F2F20616464206576656E74206C697374656E6572730D0A2020746869732E7363726F6C6C4F626A6563742E6164644576656E744C697374656E657228277363';
+wwv_flow_imp.g_varchar2_table(11) := '726F6C6C272C20746869732E5F6F6E5363726F6C6C293B0D0A2020746869732E7363726F6C6C4F626A6563742E6164644576656E744C697374656E65722827726573697A65272C20746869732E5F6F6E526573697A65293B0D0A7D3B0D0A0D0A2F2A2A0D';
+wwv_flow_imp.g_varchar2_table(12) := '0A202A20546865206F626A65637420776865726520746865207363726F6C6C20706F736974696F6E2061726520676F696E6720746F2062652063616C63756C617465642066726F6D2E0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F';
+wwv_flow_imp.g_varchar2_table(13) := '747970652E7363726F6C6C4F626A656374203D206E756C6C3B0D0A0D0A2F2A2A0D0A202A2047657420766572746963616C207472616A6563746F7279206F66207468652076696577706F72740D0A202A20406D6574686F64205F67657456696577706F72';
+wwv_flow_imp.g_varchar2_table(14) := '744865696768740D0A202A204072657475726E73207B4E756D6265727D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E5F67657456696577706F7274486569676874203D2066756E6374696F6E2829207B0D0A20207265';
+wwv_flow_imp.g_varchar2_table(15) := '7475726E20746869732E7363726F6C6C4F626A6563742E7363726F6C6C4865696768743B0D0A7D3B0D0A0D0A2F2A2A0D0A202A2047657420686F72697A6F6E74616C207472616A6563746F7279206F66207468652076696577706F72740D0A202A20406D';
+wwv_flow_imp.g_varchar2_table(16) := '6574686F64205F67657456696577706F727457696474680D0A202A204072657475726E73207B4E756D6265727D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E5F67657456696577706F72745769647468203D2066756E';
+wwv_flow_imp.g_varchar2_table(17) := '6374696F6E2829207B0D0A202072657475726E20746869732E7363726F6C6C4F626A6563742E7363726F6C6C57696474683B0D0A7D3B0D0A0D0A2F2A2A0D0A202A20476574207363726F6C6C2070726F6772657373206F6E20626F746820617869730D0A';
+wwv_flow_imp.g_varchar2_table(18) := '202A20406D6574686F64205F67657450726F67726573730D0A202A204072657475726E73207B4F626A6563747D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E5F67657450726F6772657373203D2066756E6374696F6E';
+wwv_flow_imp.g_varchar2_table(19) := '2829207B0D0A20207661722078203D20746869732E7363726F6C6C4F626A6563742E7363726F6C6C4C656674203D3D3D2030203F2030203A0D0A2020202020202020746869732E7363726F6C6C4F626A6563742E7363726F6C6C4C656674202B200D0A20';
+wwv_flow_imp.g_varchar2_table(20) := '20202020202020746869732E7363726F6C6C4F626A6563742E6F666673657457696474683B0D0A20207661722079203D20746869732E7363726F6C6C4F626A6563742E7363726F6C6C546F70203D3D3D2030203F2030203A0D0A20202020202020207468';
+wwv_flow_imp.g_varchar2_table(21) := '69732E7363726F6C6C4F626A6563742E7363726F6C6C546F70202B200D0A2020202020202020746869732E7363726F6C6C4F626A6563742E6F66667365744865696768743B0D0A0D0A202072657475726E207B0D0A20202020783A20746869732E5F7669';
+wwv_flow_imp.g_varchar2_table(22) := '6577706F72745769647468203D3D3D20300D0A2020202020203F20300D0A2020202020203A2078202F20746869732E5F76696577706F727457696474682C0D0A20202020793A20746869732E5F76696577706F7274486569676874203D3D3D20300D0A20';
+wwv_flow_imp.g_varchar2_table(23) := '20202020203F20300D0A2020202020203A2079202F20746869732E5F76696577706F72744865696768740D0A20207D3B0D0A7D3B0D0A0D0A2F2A2A0D0A202A20476574207363726F6C6C2070726F6772657373206F6E20626F746820617869730D0A202A';
+wwv_flow_imp.g_varchar2_table(24) := '20406D6574686F64205F67657450726F67726573730D0A202A204072657475726E73207B756E646566696E65647D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E5F6F6E5363726F6C6C203D2066756E6374696F6E2829';
+wwv_flow_imp.g_varchar2_table(25) := '207B0D0A2020746869732E5F70726F6772657373203D20746869732E5F67657450726F677265737328293B0D0A2020746869732E5F68616E646C6555706461746528746869732E5F70726F67726573732E782C20746869732E5F70726F67726573732E79';
+wwv_flow_imp.g_varchar2_table(26) := '293B0D0A7D3B0D0A0D0A2F2A2A0D0A202A205570646174652076696577706F7274206D6574726963732C20726563616C63756C6174652070726F677265737320616E642063616C6C207570646174652063616C6C6261636B0D0A202A20406D6574686F64';
+wwv_flow_imp.g_varchar2_table(27) := '205F6F6E526573697A650D0A202A204072657475726E73207B756E646566696E65647D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E5F6F6E526573697A65203D2066756E6374696F6E2829207B0D0A2020746869732E';
+wwv_flow_imp.g_varchar2_table(28) := '5F76696577706F7274486569676874203D20746869732E5F67657456696577706F727448656967687428293B0D0A2020746869732E5F76696577706F72745769647468203D20746869732E5F67657456696577706F7274576964746828293B0D0A0D0A20';
+wwv_flow_imp.g_varchar2_table(29) := '20746869732E5F70726F6772657373203D20746869732E5F67657450726F677265737328293B0D0A0D0A20202F2F2074726967676572207570646174652066756E6374696F6E0D0A2020746869732E5F68616E646C6555706461746528746869732E5F70';
+wwv_flow_imp.g_varchar2_table(30) := '726F67726573732E782C20746869732E5F70726F67726573732E79293B0D0A7D3B0D0A0D0A2F2A2A0D0A202A2054726967676572207570646174652063616C6C6261636B0D0A202A20406D6574686F6420747269676765720D0A202A204072657475726E';
+wwv_flow_imp.g_varchar2_table(31) := '73207B756E646566696E65647D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E74726967676572203D2066756E6374696F6E2829207B0D0A2020746869732E5F68616E646C6555706461746528746869732E5F70726F67';
+wwv_flow_imp.g_varchar2_table(32) := '726573732E782C20746869732E5F70726F67726573732E79293B0D0A7D3B0D0A0D0A2F2A2A0D0A202A2044657374726F79207363726F6C6C206F627365727665722C2072656D6F7665206C697374656E65727320616E64207570646174652063616C6C62';
+wwv_flow_imp.g_varchar2_table(33) := '61636B0D0A202A20406D6574686F642064657374726F790D0A202A204072657475726E73207B756E646566696E65647D0D0A202A2F0D0A5363726F6C6C50726F67726573732E70726F746F747970652E64657374726F79203D2066756E6374696F6E2829';
+wwv_flow_imp.g_varchar2_table(34) := '207B0D0A2020746869732E7363726F6C6C4F626A6563742E72656D6F76654576656E744C697374656E657228277363726F6C6C272C20746869732E5F6F6E5363726F6C6C293B0D0A2020746869732E7363726F6C6C4F626A6563742E72656D6F76654576';
+wwv_flow_imp.g_varchar2_table(35) := '656E744C697374656E65722827726573697A65272C20746869732E5F6F6E526573697A65293B0D0A2020746869732E5F68616E646C65557064617465203D206E756C6C3B0D0A7D3B';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(66913617700514436552)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'js/scrollProgress.js'
+,p_mime_type=>'text/javascript'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '2F2A20676C6F62616C7320617065782C24202A2F0D0A77696E646F772E5343524F4C4C50524F4752455353424152203D2077696E646F772E5343524F4C4C50524F4752455353424152207C7C207B7D3B0D0A0D0A2F2F4578656375746520736372697074';
+wwv_flow_imp.g_varchar2_table(2) := '0D0A5343524F4C4C50524F47524553534241522E6D61696E203D2066756E6374696F6E28636F6E66696729207B0D0A0D0A7D';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(66914863900759471277)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'js/script.js'
+,p_mime_type=>'text/javascript'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '77696E646F772E5343524F4C4C50524F47524553534241523D77696E646F772E5343524F4C4C50524F47524553534241527C7C7B7D2C5343524F4C4C50524F47524553534241522E6D61696E3D66756E6374696F6E2852297B7D3B';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(66915532111448989083)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'js/script.min.js'
+,p_mime_type=>'text/javascript'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '66756E6374696F6E206E6F6F7028297B7D766172205363726F6C6C50726F67726573733D66756E6374696F6E28742C73297B746869732E7363726F6C6C4F626A6563743D617065782E6A517565727928222E742D526567696F6E2D626F647922295B315D';
+wwv_flow_imp.g_varchar2_table(2) := '2C746869732E5F68616E646C655570646174653D2266756E6374696F6E223D3D747970656F6620743F743A6E6F6F702C746869732E5F76696577706F72744865696768743D746869732E5F67657456696577706F727448656967687428292C746869732E';
+wwv_flow_imp.g_varchar2_table(3) := '5F76696577706F727457696474683D746869732E5F67657456696577706F7274576964746828292C746869732E5F70726F67726573733D746869732E5F67657450726F677265737328292C746869732E5F68616E646C6555706461746528746869732E5F';
+wwv_flow_imp.g_varchar2_table(4) := '70726F67726573732E782C746869732E5F70726F67726573732E79292C746869732E5F6F6E5363726F6C6C3D746869732E5F6F6E5363726F6C6C2E62696E642874686973292C746869732E5F6F6E526573697A653D746869732E5F6F6E526573697A652E';
+wwv_flow_imp.g_varchar2_table(5) := '62696E642874686973292C746869732E7363726F6C6C4F626A6563742E6164644576656E744C697374656E657228227363726F6C6C222C746869732E5F6F6E5363726F6C6C292C746869732E7363726F6C6C4F626A6563742E6164644576656E744C6973';
+wwv_flow_imp.g_varchar2_table(6) := '74656E65722822726573697A65222C746869732E5F6F6E526573697A65297D3B5363726F6C6C50726F67726573732E70726F746F747970652E7363726F6C6C4F626A6563743D6E756C6C2C5363726F6C6C50726F67726573732E70726F746F747970652E';
+wwv_flow_imp.g_varchar2_table(7) := '5F67657456696577706F72744865696768743D66756E6374696F6E28297B72657475726E20746869732E7363726F6C6C4F626A6563742E7363726F6C6C4865696768747D2C5363726F6C6C50726F67726573732E70726F746F747970652E5F6765745669';
+wwv_flow_imp.g_varchar2_table(8) := '6577706F727457696474683D66756E6374696F6E28297B72657475726E20746869732E7363726F6C6C4F626A6563742E7363726F6C6C57696474687D2C5363726F6C6C50726F67726573732E70726F746F747970652E5F67657450726F67726573733D66';
+wwv_flow_imp.g_varchar2_table(9) := '756E6374696F6E28297B76617220743D303D3D3D746869732E7363726F6C6C4F626A6563742E7363726F6C6C4C6566743F303A746869732E7363726F6C6C4F626A6563742E7363726F6C6C4C6566742B746869732E7363726F6C6C4F626A6563742E6F66';
+wwv_flow_imp.g_varchar2_table(10) := '6673657457696474682C733D303D3D3D746869732E7363726F6C6C4F626A6563742E7363726F6C6C546F703F303A746869732E7363726F6C6C4F626A6563742E7363726F6C6C546F702B746869732E7363726F6C6C4F626A6563742E6F66667365744865';
+wwv_flow_imp.g_varchar2_table(11) := '696768743B72657475726E7B783A303D3D3D746869732E5F76696577706F727457696474683F303A742F746869732E5F76696577706F727457696474682C793A303D3D3D746869732E5F76696577706F72744865696768743F303A732F746869732E5F76';
+wwv_flow_imp.g_varchar2_table(12) := '696577706F72744865696768747D7D2C5363726F6C6C50726F67726573732E70726F746F747970652E5F6F6E5363726F6C6C3D66756E6374696F6E28297B746869732E5F70726F67726573733D746869732E5F67657450726F677265737328292C746869';
+wwv_flow_imp.g_varchar2_table(13) := '732E5F68616E646C6555706461746528746869732E5F70726F67726573732E782C746869732E5F70726F67726573732E79297D2C5363726F6C6C50726F67726573732E70726F746F747970652E5F6F6E526573697A653D66756E6374696F6E28297B7468';
+wwv_flow_imp.g_varchar2_table(14) := '69732E5F76696577706F72744865696768743D746869732E5F67657456696577706F727448656967687428292C746869732E5F76696577706F727457696474683D746869732E5F67657456696577706F7274576964746828292C746869732E5F70726F67';
+wwv_flow_imp.g_varchar2_table(15) := '726573733D746869732E5F67657450726F677265737328292C746869732E5F68616E646C6555706461746528746869732E5F70726F67726573732E782C746869732E5F70726F67726573732E79297D2C5363726F6C6C50726F67726573732E70726F746F';
+wwv_flow_imp.g_varchar2_table(16) := '747970652E747269676765723D66756E6374696F6E28297B746869732E5F68616E646C6555706461746528746869732E5F70726F67726573732E782C746869732E5F70726F67726573732E79297D2C5363726F6C6C50726F67726573732E70726F746F74';
+wwv_flow_imp.g_varchar2_table(17) := '7970652E64657374726F793D66756E6374696F6E28297B746869732E7363726F6C6C4F626A6563742E72656D6F76654576656E744C697374656E657228227363726F6C6C222C746869732E5F6F6E5363726F6C6C292C746869732E7363726F6C6C4F626A';
+wwv_flow_imp.g_varchar2_table(18) := '6563742E72656D6F76654576656E744C697374656E65722822726573697A65222C746869732E5F6F6E526573697A65292C746869732E5F68616E646C655570646174653D6E756C6C7D3B';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(67420577280388212531)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'js/scrollProgress.min.js'
+,p_mime_type=>'text/javascript'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '2E617065782D7363726F6C6C2D70726F67726573732D626172207B0D0A20206261636B67726F756E642D636F6C6F723A207472616E73706172656E743B0D0A20206865696768743A203570783B0D0A202077696474683A202D7765626B69742D66696C6C';
+wwv_flow_imp.g_varchar2_table(2) := '2D617661696C61626C653B0D0A2020706F736974696F6E3A20737469636B793B0D0A2020746F703A20303B0D0A7D0D0A0D0A70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D6261723A3A2D7765626B69742D70726F67726573';
+wwv_flow_imp.g_varchar2_table(3) := '732D76616C7565207B200D0A202020206261636B67726F756E643A20766172282D2D612D70616C657474652D7072696D617279293B200D0A7D0D0A0D0A0D0A70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D6261725B76616C';
+wwv_flow_imp.g_varchar2_table(4) := '75655D3A3A2D7765626B69742D70726F67726573732D626172207B0D0A202020206261636B67726F756E642D636F6C6F723A207472616E73706172656E743B0D0A7D0D0A0D0A70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D';
+wwv_flow_imp.g_varchar2_table(5) := '6261723A3A2D6D6F7A2D70726F67726573732D626172207B0D0A202020206261636B67726F756E643A207472616E73706172656E743B0D0A7D';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(67421206922641726756)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'css/style.css'
+,p_mime_type=>'text/css'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+begin
+wwv_flow_imp.g_varchar2_table := wwv_flow_imp.empty_varchar2_table;
+wwv_flow_imp.g_varchar2_table(1) := '2E617065782D7363726F6C6C2D70726F67726573732D6261727B6261636B67726F756E642D636F6C6F723A7472616E73706172656E743B6865696768743A3570783B77696474683A2D7765626B69742D66696C6C2D617661696C61626C653B706F736974';
+wwv_flow_imp.g_varchar2_table(2) := '696F6E3A737469636B793B746F703A307D70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D6261723A3A2D7765626B69742D70726F67726573732D76616C75657B6261636B67726F756E643A766172282D2D612D70616C657474';
+wwv_flow_imp.g_varchar2_table(3) := '652D7072696D617279297D70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D6261725B76616C75655D3A3A2D7765626B69742D70726F67726573732D6261727B6261636B67726F756E642D636F6C6F723A7472616E7370617265';
+wwv_flow_imp.g_varchar2_table(4) := '6E747D70726F67726573732E617065782D7363726F6C6C2D70726F67726573732D6261723A3A2D6D6F7A2D70726F67726573732D6261727B6261636B67726F756E643A3020307D';
+null;
+end;
+/
+begin
+wwv_flow_imp_shared.create_plugin_file(
+ p_id=>wwv_flow_imp.id(67421620757540241915)
+,p_plugin_id=>wwv_flow_imp.id(66910365880442902328)
+,p_file_name=>'css/style.min.css'
+,p_mime_type=>'text/css'
+,p_file_charset=>'utf-8'
+,p_file_content=>wwv_flow_imp.varchar2_to_blob(wwv_flow_imp.g_varchar2_table)
+);
+end;
+/
+prompt --application/end_environment
+begin
+wwv_flow_imp.import_end(p_auto_install_sup_obj => nvl(wwv_flow_application_install.get_auto_install_sup_obj, false));
+commit;
+end;
+/
+set verify on feedback on define on
+prompt  ...done
