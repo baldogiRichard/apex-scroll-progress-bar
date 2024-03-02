@@ -1,0 +1,36 @@
+{
+    "name" : "APEX Scroll Progress Bar",
+    "version" : "1.0",
+    "description" : "This plug-in creates a Scroll Progress Bar to a designated area of the APEX Page.",
+    "keywords" : ["scrollbar","item","plugin"],
+    "homepage" : "https://github.com/baldogiRichard/apex-scroll-progress-bar",
+    "bugs" : {
+      "url" : "https://github.com/baldogiRichard/apex-scroll-progress-bar/issues",
+      "email" : "baldogi.richard@gmail.com"
+    },
+    "license" : "MIT",
+    "commercial" : "No",
+    "author" : {
+      "name" : "Richard Baldogi",
+      "email" : "baldogi.richard@gmail.com",
+      "url" : "https://www.linkedin.com/in/rb-627543146",
+      "twitter": "@O_APEX_Hungary"
+    },
+    "repository" : {
+      "type" : "git",
+      "url" : "https://github.com/baldogiRichard/apex-scroll-progress-bar.git"
+    },
+   "oracle" : {
+      "versions" : ["19.0.0.0","21.0.0.0"],
+      "apex" : {
+        "versions" : ["19.1","19.2","20.1","20.2","21.1","21.2","22.1","22.2","23.1","23.2"],
+        "plugin" : {
+          "internalName" : "COM.SCROLLPROGRESSBAR.PLUGIN",
+          "type" : "item",
+          "demo" : "https://apex.oracle.com/pls/apex/r/rmzrt/apex-plugins-by-richard-baldogi/comments",
+          "previewImage" : "https://raw.githubusercontent.com/baldogiRichard/apex-comments/main/apexcomment.gif"
+        }
+      }
+    }
+  }
+  
