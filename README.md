@@ -30,6 +30,8 @@ This item plug-in creates a ProgressBar which tracks the scrolling of a designat
 </ul>
 <br>
 <b>Initialization JavaScript Function</b>
+<br>
+<br>
 <p>The Plug-in settings can be overwritten by using the Init JS Function</p>
 <br>
 
