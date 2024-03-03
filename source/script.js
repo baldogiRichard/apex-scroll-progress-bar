@@ -72,12 +72,12 @@ SCROLLPROGRESSBAR.main = function(pData,init) {
 
 SCROLLPROGRESSBAR.handleEvent = function(pValue,pItem) {
     if(pValue === 0) {
-        apex.event.trigger('#' + pItem, 'apex-scroll-progress-bar-on-start');
+        apex.event.trigger(pItem, 'apex-scroll-progress-bar-on-start');
     }
     else if (pValue > 0 && pValue < 1) {
-        apex.event.trigger('#' + pItem, 'apex-scroll-progress-bar-on-progress');
+        apex.event.trigger(pItem, 'apex-scroll-progress-bar-on-progress');
     }
     else {
-        apex.event.trigger('#' + pItem, 'apex-scroll-progress-bar-on-completed');
+        apex.event.trigger(pItem, 'apex-scroll-progress-bar-on-completed');
     }
 }
