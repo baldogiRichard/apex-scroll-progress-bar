@@ -28,7 +28,7 @@
           "internalName" : "COM.SCROLLPROGRESSBAR.PLUGIN",
           "type" : "item",
           "demo" : "https://apex.oracle.com/pls/apex/r/rmzrt/apex-plugins-by-richard-baldogi/comments",
-          "previewImage" : "https://raw.githubusercontent.com/baldogiRichard/apex-comments/main/apexcomment.gif"
+          "previewImage" : "https://raw.githubusercontent.com/baldogiRichard/apex-scroll-progress-bar/main/scrollprogressbar.gif"
         }
       }
     }
