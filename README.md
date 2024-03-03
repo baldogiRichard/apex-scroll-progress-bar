@@ -11,6 +11,24 @@ This plug-in uses the <a href="https://rstacruz.github.io/nprogress/" rel="nofol
 
 You can check each setup in my downloadable <a href="https://github.com/baldogiRichard/plug-in-site" rel="nofollow">Sample Application: APEX Plug-ins by Richard Baldogi</a>
 
+This item plug-in creates a ProgressBar which tracks the scrolling of a designated element in the Page.
+<br>
+<br>
+<b>Scroll tracking can be calculated from different positions:</b>
+<ul>
+    <li>Vertical Scrolling: Top to Bottom, Bottom to Top</li>
+    <li>Horizontal Scrolling: Left to Right, Right to left</li>
+</ul>
+<b>The following JS calls can be used for the plugin:</b>
+<br>
+<br>
+<ul>
+        <li>apex.item('ITEMNAME').getValue() : Gets the current status of the ScrollingBar which is number between 0 and 1.</li>
+        <li>apex.item('ITEMNAME').setValue(someValue) : Sets the current status of the ScrollingBar which can be number between 0 and 1.</li>
+        <li>apex.item('ITEMNAME').show() : Shows the Scrolling Bar.</li>
+        <li>apex.item('ITEMNAME').hide() : Hides the Scrolling Bar.</li>
+</ul>
+
 #
 
 License MIT
