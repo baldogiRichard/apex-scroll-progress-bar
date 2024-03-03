@@ -5,4 +5,5 @@ Minimum requirement: Oracle Application Expresss 19.1
 
 This plug-in uses the <a href="https://rstacruz.github.io/nprogress/" rel="nofollow">NProgress.js</a> and the <a href="https://jeremenichelli.github.io/scrollProgress/" rel="nofollow">scrollProgress</a> JS library.
 
-![image](https://github.com/baldogiRichard/apex-scroll-progress-bar/assets/100072414/1d1c20db-f1ad-4797-bc66-f241d2863564)
+![image](https://github.com/baldogiRichard/apex-scroll-progress-bar/assets/100072414/d5adbbc9-bee1-4611-a03f-6bfa69aadbb1)
+
